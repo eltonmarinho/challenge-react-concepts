@@ -18,7 +18,9 @@ function App() {
   async function handleAddRepository() {
     // TODO
     const response = await api.post('repositories', {
-      title:`repositorio ${Date.now()}`
+      title:`repositorio ${Date.now()}`,
+      url: 'github.com/eltonmarinho',
+      techs: ['java', 'c#']
     })
 
     const repository = response.data
@@ -30,9 +32,13 @@ function App() {
   async function handleRemoveRepository(id) {
 
     await api.delete(`repositories/${id}`);
-    repositories.splice(repositories
+
+    setRepositories(repositories.filter(
+      repository => (repository.id !== id)
+    ))
+    /* repositories.splice(repositories
       .findIndex((repo) => repo.id === id), 1);
-    setRepositories([...repositories]);
+    setRepositories([...repositories]); */
   }
 
   return (
@@ -40,12 +46,10 @@ function App() {
       <ul data-testid="repository-list">
         {repositories.map(rep => 
           <li key={rep.id}>{rep.title}
-          
-
           <button onClick={() => handleRemoveRepository(rep.id)}>
             Remover
           </button>
-        </li>
+          </li>
         )}
         
       </ul>
